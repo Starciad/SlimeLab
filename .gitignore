@@ -348,3 +348,30 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Monogame Files
+#Tooling
+_ReSharper*/
+*.resharper
+[Tt]est[Rr]esult*
+
+#Project files
+[Bb]uild/
+
+#Subversion files
+.svn
+
+# Office Temp Files
+~$*
+
+#monodroid private beta
+monodroid*.msi
+/CompiledContent/Android/IgnoreMe.dll
+/CompiledContent/OSX/IgnoreMe.dll
+/CompiledContent/Windows8/IgnoreMe.dll
+/CompiledContent/Windows/IgnoreMe.dll
+*.cachefile
+*.dll
+
+src/SlimeLab/Content/bin
+src/SlimeLab/Content/obj
