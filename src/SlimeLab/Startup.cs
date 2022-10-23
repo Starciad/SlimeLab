@@ -6,7 +6,7 @@ namespace SlimeLab
 {
     public class Startup : Game
     {
-        private GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         public Startup()
@@ -29,6 +29,7 @@ namespace SlimeLab
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            WorldManager.Startup(_graphics, Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -36,12 +37,18 @@ namespace SlimeLab
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            EntityManager.UpdateEntities(gameTime);
+            TickManager.UpdateTick(gameTime);
+
             base.Update(gameTime);
         }
-
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
+
+            _spriteBatch.Begin();
+            EntityManager.RenderEntities(gameTime, _spriteBatch);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

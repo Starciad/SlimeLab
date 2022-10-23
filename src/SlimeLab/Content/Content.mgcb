@@ -109,6 +109,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Cells/MoonCell/MoonCell8.png
 
+#begin Sprites/MetalThorn/MetalThorn1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/MetalThorn/MetalThorn1.png
+
+#begin Sprites/MetalThorn/MetalThorn2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/MetalThorn/MetalThorn2.png
+
 #begin Sprites/Player/Slime1.png
 /importer:TextureImporter
 /processor:TextureProcessor
