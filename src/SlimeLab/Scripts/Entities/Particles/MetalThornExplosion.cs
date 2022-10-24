@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,21 +16,21 @@ namespace SlimeLab
         private Vector2 position;
 
         // STATUS
-        private float speed = 550f;
+        private readonly float speed = 550f;
 
         // SMOKE
-        private float smokeSpawnTime = .01f;
+        private readonly float smokeSpawnTime = .01f;
         private float currentSmokeSpawnTime = 0f;
 
         // ANIMATION
         private Texture2D[] particleSheet;
         private int currentState;
 
-        private float nextStateTime = .08f;
+        private readonly float nextStateTime = .08f;
         private float nextStateCurrentTime = 0f;
 
         protected override void OnInstantiate(GraphicsDeviceManager graphics, ContentManager content)
-{
+        {
             _graphics = graphics;
             _content = content;
 
@@ -61,7 +56,7 @@ namespace SlimeLab
             PositionUpdate(gameTime);
             SmokeUpdate(gameTime);
 
-            if(position.X > _graphics.PreferredBackBufferWidth + 128 || position.X < -128 ||
+            if (position.X > _graphics.PreferredBackBufferWidth + 128 || position.X < -128 ||
                position.Y > _graphics.PreferredBackBufferHeight + 128 || position.Y < -128)
             {
                 EntityManager.DestroyEntity(this);

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,7 +11,7 @@ namespace SlimeLab
         private Texture2D[] particleSheet;
         private int currentState;
 
-        private float nextStateTime = .05f;
+        private readonly float nextStateTime = .05f;
         private float nextStateCurrentTime = 0f;
 
         protected override void OnInstantiate(GraphicsDeviceManager graphics, ContentManager content)

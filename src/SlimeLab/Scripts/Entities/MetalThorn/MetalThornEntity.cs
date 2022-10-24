@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
-using System.Reflection.Metadata;
 
 namespace SlimeLab
 {
@@ -24,11 +18,10 @@ namespace SlimeLab
         private PlayerEntity playerEntity;
 
         // CELL STATUS
-        private float metalThornPower = 0.8f;
+        private readonly float metalThornPower = 0.8f;
 
         // CELL WORLD MAP
-        private float metalThornRadius = 32f;
-        private float metalThornSpeed = 2f;
+        private readonly float metalThornSpeed = 2f;
         private Vector2 metalThornPosition;
         private Vector2 metalThornScale;
 
@@ -38,7 +31,7 @@ namespace SlimeLab
         private Texture2D[] metalThornSheetTextures;
         private int currentState;
 
-        private float changeStateTime = 0.1f;
+        private readonly float changeStateTime = 0.1f;
         private float changeStateCurrentTime = 0f;
 
         private bool collected;
@@ -94,7 +87,7 @@ namespace SlimeLab
 
         private void MoveToPlayerUpdate(GameTime gameTime)
         {
-            if(playerEntity.PlayerPosition.X + _random.Next(-1000, 1000) < metalThornPosition.X)
+            if (playerEntity.PlayerPosition.X + _random.Next(-1000, 1000) < metalThornPosition.X)
             {
                 nextMetalThornPosition.X -= _random.Next(1, 20) + metalThornSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }

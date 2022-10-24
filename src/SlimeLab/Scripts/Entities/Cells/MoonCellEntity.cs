@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -25,10 +18,9 @@ namespace SlimeLab
         private PlayerEntity playerEntity;
 
         // CELL STATUS
-        private float cellPower = 0.2f;
+        private readonly float cellPower = 0.2f;
 
         // CELL WORLD MAP
-        private float cellRadius = 32f;
         private Vector2 cellPosition;
         private Vector2 cellScale;
 
@@ -36,7 +28,7 @@ namespace SlimeLab
         private Texture2D[] cellSheetTextures;
         private int currentState;
 
-        private float changeStateTime = 0.1f;
+        private readonly float changeStateTime = 0.1f;
         private float changeStateCurrentTime = 0f;
 
         private bool collected;
@@ -83,7 +75,7 @@ namespace SlimeLab
         protected override void OnUpdate(GameTime gameTime)
         {
             float distance = Vector2.Distance(cellPosition, playerEntity.PlayerPosition);
-            if(distance < playerEntity.PlayerRadius && !collected)
+            if (distance < playerEntity.PlayerRadius && !collected)
             {
                 ScoreManager.Score++;
                 collected = true;
