@@ -27,14 +27,19 @@ namespace SlimeLab
 
             TickManager.OnTicked += WorldTicked;
         }
-
+        public static void Cancel()
+        {
+            TickManager.OnTicked -= WorldTicked;
+        }
         private static void InstantiatePlayer()
         {
             EntityManager.InstantiateEntity<PlayerEntity>(_graphics, _content);
         }
-
         private static void WorldTicked()
         {
+            if (GameManager.IsGameEnded)
+                return;
+
             EntityManager.InstantiateEntity<MoonCellEntity>(_graphics, _content);
 
             if(_random.Next(0, 100) < 50)

@@ -36,9 +36,13 @@ namespace SlimeLab
 
         public static T InstantiateEntity<T>(GraphicsDeviceManager graphics, ContentManager content) where T : Entity
         {
+            return InstantiateEntity<T>(graphics, content, Vector2.Zero);
+        }
+        public static T InstantiateEntity<T>(GraphicsDeviceManager graphics, ContentManager content, Vector2 position) where T : Entity
+        {
             Entity entity = Activator.CreateInstance<T>();
 
-            entity.InstantiateEntity(graphics, content);
+            entity.InstantiateEntity(graphics, content, position);
             entity.StartupEntity();
 
             instantiatedEntities.Add(entity);
@@ -54,6 +58,16 @@ namespace SlimeLab
         {
             instantiatedEntities.Remove(entity);
             entity.DestroyEntity();
+        }
+
+        public static void ClearEntitites()
+        {
+            for (int i = 0; i < instantiatedEntities.Count; i++)
+            {
+                instantiatedEntities[i].DestroyEntity();
+            }
+
+            instantiatedEntities.Clear();
         }
     }
 }

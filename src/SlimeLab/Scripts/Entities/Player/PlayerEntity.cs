@@ -16,6 +16,7 @@ namespace SlimeLab
         private GraphicsDeviceManager _graphics;
         private ContentManager _content;
 
+        public bool IsDead { get { return nextPlayerScale == Vector2.Zero; } }
         public float PlayerRadius { get { return playerRadius * playerScale.X / 2; } }
 
         public Vector2 PlayerPosition { get { return playerPosition; } }
@@ -80,7 +81,9 @@ namespace SlimeLab
             PlayerScaleUpdate(gameTime);
             PlayerPositionUpdate(gameTime);
             PlayerControlsUpdate(gameTime);
+
             LockPlayerInMap();
+            LockPlayerScale();
         }
         private void PlayerScaleUpdate(GameTime gameTime)
         {
@@ -121,6 +124,14 @@ namespace SlimeLab
 
             nextPlayerPosition.X = MathHelper.Clamp(nextPlayerPosition.X, (playerScale.X * 32) / 2, _graphics.PreferredBackBufferWidth - ((playerScale.X * 32) / 2));
             nextPlayerPosition.Y = MathHelper.Clamp(nextPlayerPosition.Y, (playerScale.Y * 32) / 2, _graphics.PreferredBackBufferHeight - ((playerScale.Y * 32) / 2));
+        }
+        private void LockPlayerScale()
+        {
+            if (nextPlayerScale.X < 0.5f)
+                nextPlayerScale = Vector2.Zero;
+
+            playerScale = Vector2.Clamp(playerScale, Vector2.Zero, new Vector2(float.MaxValue));
+            nextPlayerScale = Vector2.Clamp(nextPlayerScale, Vector2.Zero, new Vector2(float.MaxValue));
         }
 
         //=========================//

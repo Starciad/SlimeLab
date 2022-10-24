@@ -29,7 +29,12 @@ namespace SlimeLab
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            WorldManager.Startup(_graphics, Content);
+
+            Reset();
+
+            SpriteFont defaultFont = Content.Load<SpriteFont>(@"SpriteFonts\DefaultFont");
+            ScoreManager.DefaultFont = defaultFont;
+            GameManager.DefaultFont = defaultFont;
         }
 
         protected override void Update(GameTime gameTime)
@@ -37,8 +42,14 @@ namespace SlimeLab
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.R) && GameManager.IsGameEnded)
+            {
+                Reset();
+            }
+
             EntityManager.UpdateEntities(gameTime);
             TickManager.UpdateTick(gameTime);
+            GameManager.Update();
 
             base.Update(gameTime);
         }
@@ -48,9 +59,23 @@ namespace SlimeLab
 
             _spriteBatch.Begin();
             EntityManager.RenderEntities(gameTime, _spriteBatch);
+            ScoreManager.RenderScore(gameTime, _spriteBatch, _graphics);
+            GameManager.Render(gameTime, _spriteBatch, _graphics);
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public void Reset()
+        {
+            EntityManager.ClearEntitites();
+            WorldManager.Cancel();
+
+            WorldManager.Startup(_graphics, Content);
+            GameManager.Startup();
+
+            ScoreManager.Score = 0;
+            GameManager.IsGameEnded = false;
         }
     }
 }

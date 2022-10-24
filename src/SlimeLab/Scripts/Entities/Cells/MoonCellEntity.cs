@@ -75,10 +75,13 @@ namespace SlimeLab
         protected override void OnUpdate(GameTime gameTime)
         {
             float distance = Vector2.Distance(cellPosition, playerEntity.PlayerPosition);
-            if(distance < playerEntity.PlayerRadius * 2f && !collected)
+            if(distance < playerEntity.PlayerRadius && !collected)
             {
+                ScoreManager.Score++;
                 collected = true;
+
                 playerEntity.NextPlayerScale += new Vector2(cellPower, cellPower);
+                EntityManager.InstantiateEntity<MoonCellDestructionParticle>(_graphics, _content, cellPosition);
                 EntityManager.DestroyEntity(this);
             }
         }

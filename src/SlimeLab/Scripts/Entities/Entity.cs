@@ -14,8 +14,12 @@ namespace SlimeLab
     {
         private bool isReady = false;
 
-        public void InstantiateEntity(GraphicsDeviceManager graphics, ContentManager content)
+        protected Vector2 InstancePosition { get; private set; }
+
+        public void InstantiateEntity(GraphicsDeviceManager graphics, ContentManager content, Vector2 position)
         {
+            InstancePosition = position;
+
             OnInstantiate(graphics, content);
         }
 

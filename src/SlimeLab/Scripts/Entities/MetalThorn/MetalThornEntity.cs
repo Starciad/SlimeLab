@@ -22,7 +22,7 @@ namespace SlimeLab
         private PlayerEntity playerEntity;
 
         // CELL STATUS
-        private float metalThornPower = 0.5f;
+        private float metalThornPower = 0.8f;
 
         // CELL WORLD MAP
         private float metalThornRadius = 32f;
@@ -112,6 +112,13 @@ namespace SlimeLab
             {
                 collected = true;
                 playerEntity.NextPlayerScale -= new Vector2(metalThornPower, metalThornPower);
+
+                for (int i = 0; i < 4; i++)
+                {
+                    MetalThornExplosion explosion = EntityManager.InstantiateEntity<MetalThornExplosion>(_graphics, _content, metalThornPosition);
+                    explosion.Direction = i + 1;
+                }
+
                 EntityManager.DestroyEntity(this);
             }
         }
@@ -135,7 +142,6 @@ namespace SlimeLab
                              SpriteEffects.None,
                              0f);
         }
-
         private void AnimationUpdate(GameTime gameTime)
         {
             if (changeStateCurrentTime < changeStateTime)
