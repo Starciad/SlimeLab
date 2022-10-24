@@ -27,6 +27,7 @@
 </div>
 
 <br/>
+<br/>
 
 <div>
 <img src=".github/images/game/slime.gif" width="10%"/>
@@ -36,7 +37,21 @@
 
 <br/>
 
-<h1>🖼 IMAGENS 🖼</h1>
+<h1>🎮 《 CONTROLS 》 🎮</h1>
+<div align="left">
+<p><b>▸ Movimentar:</b> <code>W/A/S/D</code></p>
+<p><b>▸ Sair:</b> <code>ESC</code></p>
+<p><b>▸ Reiniciar:</b> <code>R</code></p>
+</div>
+
+<h1>🖼 《 IMAGENS 》 🖼</h1>
+
+<div align="center">
+<img src=".github/images/prints/image-0.png" width="350px"/>
+<img src=".github/images/prints/image-1.png" width="350px"/>
+<img src=".github/images/prints/image-2.png" width="350px"/>
+<img src=".github/images/prints/image-3.png" width="350px"/>
+</div>
 
 
 <!--==========-->
