@@ -5,9 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace SlimeLab
 {
@@ -38,6 +41,9 @@ namespace SlimeLab
 
         private bool collected;
 
+        // SOUNDS
+        private Song collectSoundEffect;
+
         //=========================//
 
         protected override void OnInstantiate(GraphicsDeviceManager graphics, ContentManager content)
@@ -57,6 +63,8 @@ namespace SlimeLab
                 _content.Load<Texture2D>(@"Sprites\Cells\MoonCell\MoonCell6"),
                 _content.Load<Texture2D>(@"Sprites\Cells\MoonCell\MoonCell7"),
             };
+
+            collectSoundEffect = _content.Load<Song>(@"Sounds\coin");
 
             cellScale = new(1, 1);
             cellPosition = new(_random.Next(32, _graphics.PreferredBackBufferWidth - 32),
@@ -82,6 +90,8 @@ namespace SlimeLab
 
                 playerEntity.NextPlayerScale += new Vector2(cellPower, cellPower);
                 EntityManager.InstantiateEntity<MoonCellDestructionParticle>(_graphics, _content, cellPosition);
+
+                MediaPlayer.Play(collectSoundEffect);
                 EntityManager.DestroyEntity(this);
             }
         }

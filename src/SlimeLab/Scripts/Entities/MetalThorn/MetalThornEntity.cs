@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
+using System.Reflection.Metadata;
 
 namespace SlimeLab
 {
@@ -41,6 +43,9 @@ namespace SlimeLab
 
         private bool collected;
 
+        // SOUND
+        private Song explosionSoundEffect;
+
         //=========================//
 
         protected override void OnInstantiate(GraphicsDeviceManager graphics, ContentManager content)
@@ -55,6 +60,8 @@ namespace SlimeLab
                 _content.Load<Texture2D>(@"Sprites\MetalThorn\MetalThorn1"),
                 _content.Load<Texture2D>(@"Sprites\MetalThorn\MetalThorn2"),
             };
+
+            explosionSoundEffect = _content.Load<Song>(@"Sounds\bullet-bill");
 
             metalThornScale = new(1, 1);
             metalThornPosition = new(_random.Next(0, _graphics.PreferredBackBufferWidth),
@@ -119,6 +126,7 @@ namespace SlimeLab
                     explosion.Direction = i + 1;
                 }
 
+                MediaPlayer.Play(explosionSoundEffect);
                 EntityManager.DestroyEntity(this);
             }
         }
