@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using SlimeLab.Entities.Particles;
 using SlimeLab.Entities.Player;
+using SlimeLab.Entities.Projectiles;
 
 namespace SlimeLab.Entities.Cells
 {
@@ -42,7 +43,9 @@ namespace SlimeLab.Entities.Cells
                 this.collected = true;
 
                 this.playerEntity.NextPlayerScale += new Vector2(this.cellPower, this.cellPower);
+
                 _ = this.Core.EntityManager.InstantiateEntity<MoonCellDestructionParticle>(this.Position);
+                _ = this.Core.EntityManager.InstantiateEntity<MoonCellProjectile>(this.Position);
 
                 this.Core.CollectSoundEffect.CreateInstance().Play();
                 this.Core.EntityManager.DestroyEntity(this);

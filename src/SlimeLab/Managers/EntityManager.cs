@@ -11,6 +11,8 @@ namespace SlimeLab.Managers
 {
     public sealed class EntityManager : GameObject
     {
+        public Entity[] Entities => this.instantiatedEntities.ToArray();
+
         private readonly List<Entity> instantiatedEntities = new();
 
         public EntityManager(Core core) : base(core)

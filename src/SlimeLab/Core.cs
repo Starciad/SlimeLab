@@ -25,6 +25,7 @@ namespace SlimeLab
         public Texture2D[] ExplosionSheetTextures => this.explosionSheetTextures;
         public Texture2D[] ExplosionSmokeSheetTextures => this.explosionSmokeSheetTextures;
         public Texture2D[] MoonCellSheetTextures => this.moonCellSheetTextures;
+        public Texture2D ProjectileTexture => this.projectileTexture;
 
         public SoundEffect ExplosionSoundEffect => this.explosionSoundEffect;
         public SoundEffect CollectSoundEffect => this.collectSoundEffect;
@@ -40,6 +41,7 @@ namespace SlimeLab
         private Texture2D[] explosionSheetTextures;
         private Texture2D[] explosionSmokeSheetTextures;
         private Texture2D[] moonCellSheetTextures;
+        private Texture2D projectileTexture;
 
         private SoundEffect explosionSoundEffect;
         private SoundEffect collectSoundEffect;
@@ -137,6 +139,8 @@ namespace SlimeLab
                 this.Content.Load<Texture2D>(@"Sprites\Particles\MoonCell\MoonCellExplosion8"),
                 this.Content.Load<Texture2D>(@"Sprites\Particles\MoonCell\MoonCellExplosion9"),
             };
+
+            this.projectileTexture = this.Content.Load<Texture2D>(@"Sprites\Projectiles\MoonCellProjectile");
 
             this.explosionSoundEffect = this.Content.Load<SoundEffect>(@"Sounds\bullet-bill");
             this.collectSoundEffect = this.Content.Load<SoundEffect>(@"Sounds\coin");
