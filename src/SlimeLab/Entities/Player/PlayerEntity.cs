@@ -1,34 +1,23 @@
 ﻿
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace SlimeLab.Entities.Player
 {
-    public class PlayerEntity : Entity
+    public sealed class PlayerEntity : Entity
     {
         public bool IsDead => this.nextPlayerScale == Vector2.Zero;
-        public float PlayerRadius => this.playerRadius * this.playerScale.X / 2;
-
-        public Vector2 PlayerPosition => this.playerPosition;
-        public Vector2 PlayerScale => this.playerScale;
+        public float PlayerRadius => this.playerRadius * this.Scale.X / 2;
 
         public Vector2 NextPlayerPosition { get => this.nextPlayerPosition; set => this.nextPlayerPosition = value; }
         public Vector2 NextPlayerScale { get => this.nextPlayerScale; set => this.nextPlayerScale = value; }
-
-        private Core _core;
-        private GraphicsDeviceManager _graphics;
-        private ContentManager _content;
 
         // PLAYER STATUS
         private readonly float playerSpeed = 300f;
         private readonly float playerRadius = 32f;
 
         // PLAYER WORLD MAP
-        private Vector2 playerPosition;
-        private Vector2 playerScale;
-
         private Vector2 nextPlayerPosition;
         private Vector2 nextPlayerScale;
 
@@ -38,32 +27,23 @@ namespace SlimeLab.Entities.Player
         private readonly float changeStateTime = 0.1f;
         private float changeStateCurrentTime = 0f;
 
-        //=========================//
-
-        protected override void OnInstantiate(Core core, GraphicsDeviceManager graphics, ContentManager content)
-        {
-            this._core = core;
-            this._graphics = graphics;
-            this._content = content;
-
-            this.playerScale = new(1, 1);
-            this.playerPosition = new(this._graphics.PreferredBackBufferWidth / 2,
-                                 this._graphics.PreferredBackBufferHeight / 2);
-
-            this.nextPlayerPosition = this.playerPosition;
-            this.nextPlayerScale = this.playerScale;
-        }
-
-        //=========================//
-
-        protected override void OnStartup()
+        public PlayerEntity(Core core) : base(core)
         {
 
         }
 
         //=========================//
 
-        protected override void OnUpdate(GameTime gameTime)
+        public override void Startup()
+        {
+            this.Scale = Vector2.One;
+            this.Position = new(this.Core.GraphicsDeviceManager.PreferredBackBufferWidth / 2, this.Core.GraphicsDeviceManager.PreferredBackBufferHeight / 2);
+
+            this.nextPlayerPosition = this.Position;
+            this.nextPlayerScale = this.Scale;
+        }
+
+        public override void Update(GameTime gameTime)
         {
             PlayerScaleUpdate(gameTime);
             PlayerPositionUpdate(gameTime);
@@ -72,14 +52,23 @@ namespace SlimeLab.Entities.Player
             LockPlayerInMap();
             LockPlayerScale();
         }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            AnimationUpdate(gameTime);
+            spriteBatch.Draw(this.Core.PlayerSheetTextures[this.currentState], this.Position, null, Color.White, 0f, new Vector2(this.Core.PlayerSheetTextures[this.currentState].Width / 2, this.Core.PlayerSheetTextures[this.currentState].Height / 2), this.Scale, SpriteEffects.None, 0f);
+        }
+
         private void PlayerScaleUpdate(GameTime gameTime)
         {
-            this.playerScale = Vector2.Lerp(this.playerScale, this.nextPlayerScale, 6f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            this.Scale = Vector2.Lerp(this.Scale, this.nextPlayerScale, 6f * (float)gameTime.ElapsedGameTime.TotalSeconds);
         }
+
         private void PlayerPositionUpdate(GameTime gameTime)
         {
-            this.playerPosition = Vector2.Lerp(this.playerPosition, this.nextPlayerPosition, 6f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            this.Position = Vector2.Lerp(this.Position, this.nextPlayerPosition, 6f * (float)gameTime.ElapsedGameTime.TotalSeconds);
         }
+
         private void PlayerControlsUpdate(GameTime gameTime)
         {
             KeyboardState state = Keyboard.GetState();
@@ -106,12 +95,17 @@ namespace SlimeLab.Entities.Player
         }
         private void LockPlayerInMap()
         {
-            this.playerPosition.X = MathHelper.Clamp(this.playerPosition.X, this.playerScale.X * 32 / 2, this._graphics.PreferredBackBufferWidth - (this.playerScale.X * 32 / 2));
-            this.playerPosition.Y = MathHelper.Clamp(this.playerPosition.Y, this.playerScale.Y * 32 / 2, this._graphics.PreferredBackBufferHeight - (this.playerScale.Y * 32 / 2));
+            Vector2 tempPos = Vector2.One;
 
-            this.nextPlayerPosition.X = MathHelper.Clamp(this.nextPlayerPosition.X, this.playerScale.X * 32 / 2, this._graphics.PreferredBackBufferWidth - (this.playerScale.X * 32 / 2));
-            this.nextPlayerPosition.Y = MathHelper.Clamp(this.nextPlayerPosition.Y, this.playerScale.Y * 32 / 2, this._graphics.PreferredBackBufferHeight - (this.playerScale.Y * 32 / 2));
+            tempPos.X = MathHelper.Clamp(this.Position.X, this.Scale.X * 32 / 2, this.Core.GraphicsDeviceManager.PreferredBackBufferWidth - (this.Scale.X * 32 / 2));
+            tempPos.Y = MathHelper.Clamp(this.Position.Y, this.Scale.Y * 32 / 2, this.Core.GraphicsDeviceManager.PreferredBackBufferHeight - (this.Scale.Y * 32 / 2));
+
+            this.Position = tempPos;
+
+            this.nextPlayerPosition.X = MathHelper.Clamp(this.nextPlayerPosition.X, this.Scale.X * 32 / 2, this.Core.GraphicsDeviceManager.PreferredBackBufferWidth - (this.Scale.X * 32 / 2));
+            this.nextPlayerPosition.Y = MathHelper.Clamp(this.nextPlayerPosition.Y, this.Scale.Y * 32 / 2, this.Core.GraphicsDeviceManager.PreferredBackBufferHeight - (this.Scale.Y * 32 / 2));
         }
+
         private void LockPlayerScale()
         {
             if (this.nextPlayerScale.X < 0.5f)
@@ -119,25 +113,12 @@ namespace SlimeLab.Entities.Player
                 this.nextPlayerScale = Vector2.Zero;
             }
 
-            this.playerScale = Vector2.Clamp(this.playerScale, Vector2.Zero, new Vector2(float.MaxValue));
+            this.Scale = Vector2.Clamp(this.Scale, Vector2.Zero, new Vector2(float.MaxValue));
             this.nextPlayerScale = Vector2.Clamp(this.nextPlayerScale, Vector2.Zero, new Vector2(float.MaxValue));
         }
 
         //=========================//
 
-        protected override void OnRender(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            AnimationUpdate(gameTime);
-            spriteBatch.Draw(this._core.PlayerSheetTextures[this.currentState],
-                             this.playerPosition,
-                             null,
-                             Color.White,
-                             0f,
-                             new Vector2(this._core.PlayerSheetTextures[this.currentState].Width / 2, this._core.PlayerSheetTextures[this.currentState].Height / 2),
-                             this.playerScale,
-                             SpriteEffects.None,
-                             0f);
-        }
         private void AnimationUpdate(GameTime gameTime)
         {
             if (this.changeStateCurrentTime < this.changeStateTime)
@@ -146,7 +127,7 @@ namespace SlimeLab.Entities.Player
             }
             else
             {
-                if (this.currentState < this._core.PlayerSheetTextures.Length - 1)
+                if (this.currentState < this.Core.PlayerSheetTextures.Length - 1)
                 {
                     this.currentState++;
                 }

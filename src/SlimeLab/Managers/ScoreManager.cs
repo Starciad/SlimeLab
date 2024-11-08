@@ -11,7 +11,7 @@ namespace SlimeLab.Managers
 
         public static SpriteFont DefaultFont { get; set; }
 
-        public static void RenderScore(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
+        public static void DrawScore(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
         {
             StringBuilder content = new(Score.ToString("00"));
             Vector2 stringSize = DefaultFont.MeasureString(content.ToString());

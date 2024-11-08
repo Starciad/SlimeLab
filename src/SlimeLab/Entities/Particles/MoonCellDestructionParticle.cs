@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using SlimeLab.Managers;
@@ -9,48 +8,29 @@ namespace SlimeLab.Entities.Particles
 {
     public class MoonCellDestructionParticle : Entity
     {
-        private Core _core;
-
         // ANIMATION
         private int currentState;
 
         private readonly float nextStateTime = .05f;
         private float nextStateCurrentTime = 0f;
 
-        protected override void OnInstantiate(Core core, GraphicsDeviceManager graphics, ContentManager content)
-        {
-            this._core = core;
-        }
-
-        protected override void OnStartup()
+        public MoonCellDestructionParticle(Core core) : base(core)
         {
 
         }
 
-        //========================//
-
-        protected override void OnUpdate(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
-            if (this.currentState == this._core.MoonCellSheetTextures.Length - 1)
+            if (this.currentState == this.Core.MoonCellSheetTextures.Length - 1)
             {
                 EntityManager.DestroyEntity(this);
             }
         }
 
-        //========================//
-
-        protected override void OnRender(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             AnimationUpdate(gameTime);
-            spriteBatch.Draw(this._core.MoonCellSheetTextures[this.currentState],
-                             this.InstancePosition,
-                             null,
-                             Color.White,
-                             0f,
-                             new Vector2(this._core.MoonCellSheetTextures[this.currentState].Width / 2, this._core.MoonCellSheetTextures[this.currentState].Height / 2),
-                             Vector2.One,
-                             SpriteEffects.None,
-                             0f);
+            spriteBatch.Draw(this.Core.MoonCellSheetTextures[this.currentState], this.Position, null, Color.White, 0f, new Vector2(this.Core.MoonCellSheetTextures[this.currentState].Width / 2, this.Core.MoonCellSheetTextures[this.currentState].Height / 2), this.Scale, SpriteEffects.None, 0f);
         }
 
         private void AnimationUpdate(GameTime gameTime)
@@ -61,7 +41,7 @@ namespace SlimeLab.Entities.Particles
             }
             else
             {
-                if (this.currentState < this._core.MoonCellSheetTextures.Length - 1)
+                if (this.currentState < this.Core.MoonCellSheetTextures.Length - 1)
                 {
                     this.currentState++;
                 }

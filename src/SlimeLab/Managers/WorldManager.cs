@@ -1,29 +1,16 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-
-using SlimeLab.Entities.Cells;
+﻿using SlimeLab.Entities.Cells;
 using SlimeLab.Entities.MetalThorn;
 using SlimeLab.Entities.Player;
-
-using System;
 
 namespace SlimeLab.Managers
 {
     public static class WorldManager
     {
         private static Core _core;
-        private static GraphicsDeviceManager _graphics;
-        private static ContentManager _content;
 
-        private static Random _random;
-
-        public static void Startup(Core core, GraphicsDeviceManager graphics, ContentManager content)
+        public static void Startup(Core core)
         {
             _core = core;
-            _graphics = graphics;
-            _content = content;
-
-            _random = new();
 
             InstantiatePlayer();
 
@@ -35,7 +22,7 @@ namespace SlimeLab.Managers
         }
         private static void InstantiatePlayer()
         {
-            _ = EntityManager.InstantiateEntity<PlayerEntity>(_core, _graphics, _content);
+            _ = EntityManager.InstantiateEntity<PlayerEntity>(_core);
         }
         private static void WorldTicked()
         {
@@ -44,11 +31,11 @@ namespace SlimeLab.Managers
                 return;
             }
 
-            _ = EntityManager.InstantiateEntity<MoonCellEntity>(_core, _graphics, _content);
+            _ = EntityManager.InstantiateEntity<MoonCellEntity>(_core);
 
-            if (_random.Next(0, 100) < 50)
+            if (_core.Random.Next(0, 100) < 50)
             {
-                _ = EntityManager.InstantiateEntity<MetalThornEntity>(_core, _graphics, _content);
+                _ = EntityManager.InstantiateEntity<MetalThornEntity>(_core);
             }
         }
     }

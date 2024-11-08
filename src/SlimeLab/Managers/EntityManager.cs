@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using SlimeLab.Entities;
@@ -11,37 +10,41 @@ namespace SlimeLab.Managers
 {
     public static class EntityManager
     {
+        private static Core _core;
+
         private static readonly List<Entity> instantiatedEntities = new();
 
         //=================================//
 
+        public static void Startup(Core core)
+        {
+            _core = core;
+        }
         public static void UpdateEntities(GameTime gameTime)
         {
             for (int i = 0; i < instantiatedEntities.Count; i++)
             {
-                instantiatedEntities[i].UpdateEntity(gameTime);
+                instantiatedEntities[i].Update(gameTime);
             }
         }
-        public static void RenderEntities(GameTime gameTime, SpriteBatch spriteBatch)
+        public static void DrawEntities(GameTime gameTime, SpriteBatch spriteBatch)
         {
             for (int i = 0; i < instantiatedEntities.Count; i++)
             {
-                instantiatedEntities[i].RenderEntity(gameTime, spriteBatch);
+                instantiatedEntities[i].Draw(gameTime, spriteBatch);
             }
         }
 
         //=================================//
 
-        public static T InstantiateEntity<T>(Core core, GraphicsDeviceManager graphics, ContentManager content) where T : Entity
+        public static T InstantiateEntity<T>(Core core) where T : Entity
         {
-            return InstantiateEntity<T>(core, graphics, content, Vector2.Zero);
+            return InstantiateEntity<T>(core, Vector2.Zero);
         }
-        public static T InstantiateEntity<T>(Core core, GraphicsDeviceManager graphics, ContentManager content, Vector2 position) where T : Entity
+        public static T InstantiateEntity<T>(Core core, Vector2 position) where T : Entity
         {
-            Entity entity = Activator.CreateInstance<T>();
-
-            entity.InstantiateEntity(core, graphics, content, position);
-            entity.StartupEntity();
+            Entity entity = (Entity)Activator.CreateInstance(typeof(T), new object[] { _core });
+            entity.Startup();
 
             instantiatedEntities.Add(entity);
             return (T)entity;
@@ -55,14 +58,14 @@ namespace SlimeLab.Managers
         public static void DestroyEntity(Entity entity)
         {
             _ = instantiatedEntities.Remove(entity);
-            entity.DestroyEntity();
+            entity.Destroy();
         }
 
         public static void ClearEntitites()
         {
             for (int i = 0; i < instantiatedEntities.Count; i++)
             {
-                instantiatedEntities[i].DestroyEntity();
+                instantiatedEntities[i].Destroy();
             }
 
             instantiatedEntities.Clear();

@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using SlimeLab.Managers;
@@ -10,13 +9,6 @@ namespace SlimeLab.Entities.Particles
     public class MetalThornExplosion : Entity
     {
         public int Direction { get; set; }
-
-        private GraphicsDeviceManager _graphics;
-        private ContentManager _content;
-        private Core _core;
-
-        // POSITION
-        private Vector2 position;
 
         // STATUS
         private readonly float speed = 550f;
@@ -31,58 +23,51 @@ namespace SlimeLab.Entities.Particles
         private readonly float nextStateTime = .08f;
         private float nextStateCurrentTime = 0f;
 
-        protected override void OnInstantiate(Core core, GraphicsDeviceManager graphics, ContentManager content)
-        {
-            this._core = core;
-            this._graphics = graphics;
-            this._content = content;
-
-            this.position = this.InstancePosition;
-        }
-
-        protected override void OnStartup()
+        public MetalThornExplosion(Core core) : base(core)
         {
 
         }
 
-        //========================//
-
-        protected override void OnUpdate(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             PositionUpdate(gameTime);
             SmokeUpdate(gameTime);
 
-            if (this.position.X > this._graphics.PreferredBackBufferWidth + 128 || this.position.X < -128 ||
-               this.position.Y > this._graphics.PreferredBackBufferHeight + 128 || this.position.Y < -128)
+            if (this.Position.X > this.Core.GraphicsDeviceManager.PreferredBackBufferWidth + 128 || this.Position.X < -128 ||
+               this.Position.Y > this.Core.GraphicsDeviceManager.PreferredBackBufferHeight + 128 || this.Position.Y < -128)
             {
                 EntityManager.DestroyEntity(this);
             }
         }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            AnimationUpdate(gameTime);
+            spriteBatch.Draw(this.Core.ExplosionSheetTextures[this.currentState], this.Position, null, Color.White, 0f, new Vector2(this.Core.ExplosionSheetTextures[this.currentState].Width / 2, this.Core.ExplosionSheetTextures[this.currentState].Height / 2), this.Scale, SpriteEffects.None, 0f);
+        }
+
         private void PositionUpdate(GameTime gameTime)
         {
             switch (this.Direction)
             {
                 case 1: // UP - LEFT
-                    this.position.X -= this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    this.position.Y -= this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    this.Position = new(this.Position.X - (this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds), this.Position.Y - (this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds));
                     break;
 
                 case 2: // UP - RIGHT
-                    this.position.X += this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    this.position.Y -= this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    this.Position = new(this.Position.X + (this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds), this.Position.Y - (this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds));
                     break;
 
                 case 3: // DOWN - LEFT
-                    this.position.X -= this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    this.position.Y += this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    this.Position = new(this.Position.X - (this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds), this.Position.Y + (this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds));
                     break;
 
                 case 4: // DOWN - RIGHT
-                    this.position.X += this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    this.position.Y += this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    this.Position = new(this.Position.X + (this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds), this.Position.Y + (this.speed * (float)gameTime.ElapsedGameTime.TotalSeconds));
                     break;
             }
         }
+
         private void SmokeUpdate(GameTime gameTime)
         {
             if (this.currentSmokeSpawnTime < this.smokeSpawnTime)
@@ -91,27 +76,12 @@ namespace SlimeLab.Entities.Particles
             }
             else
             {
-                _ = EntityManager.InstantiateEntity<MetalThornExplosionSmoke>(this._core, this._graphics, this._content, this.position);
+                _ = EntityManager.InstantiateEntity<MetalThornExplosionSmoke>(this.Core, this.Position);
 
                 this.currentSmokeSpawnTime = 0;
             }
         }
 
-        //========================//
-
-        protected override void OnRender(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            AnimationUpdate(gameTime);
-            spriteBatch.Draw(this._core.ExplosionSheetTextures[this.currentState],
-                             this.position,
-                             null,
-                             Color.White,
-                             0f,
-                             new Vector2(this._core.ExplosionSheetTextures[this.currentState].Width / 2, this._core.ExplosionSheetTextures[this.currentState].Height / 2),
-                             Vector2.One,
-                             SpriteEffects.None,
-                             0f);
-        }
         private void AnimationUpdate(GameTime gameTime)
         {
             if (this.nextStateCurrentTime < this.nextStateTime)
@@ -120,7 +90,7 @@ namespace SlimeLab.Entities.Particles
             }
             else
             {
-                if (this.currentState < this._core.ExplosionSheetTextures.Length - 1)
+                if (this.currentState < this.Core.ExplosionSheetTextures.Length - 1)
                 {
                     this.currentState++;
                 }

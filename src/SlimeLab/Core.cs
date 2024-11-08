@@ -11,6 +11,8 @@ namespace SlimeLab
 {
     public class Core : Game
     {
+        public GraphicsDeviceManager GraphicsDeviceManager => this._graphics;
+
         public Texture2D[] PlayerSheetTextures => this.playerSheetTextures;
         public Texture2D[] MetalThornSheetTextures => this.metalThornSheetTextures;
         public Texture2D[] CellSheetTextures => this.cellSheetTextures;
@@ -145,8 +147,8 @@ namespace SlimeLab
             this.GraphicsDevice.Clear(Color.White);
 
             this._spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
-            EntityManager.RenderEntities(gameTime, this._spriteBatch);
-            ScoreManager.RenderScore(gameTime, this._spriteBatch, this._graphics);
+            EntityManager.DrawEntities(gameTime, this._spriteBatch);
+            ScoreManager.DrawScore(gameTime, this._spriteBatch, this._graphics);
             GameManager.Render(gameTime, this._spriteBatch, this._graphics);
             this._spriteBatch.End();
 
@@ -158,7 +160,8 @@ namespace SlimeLab
             EntityManager.ClearEntitites();
             WorldManager.Cancel();
 
-            WorldManager.Startup(this, this._graphics, this.Content);
+            EntityManager.Startup(this);
+            WorldManager.Startup(this);
             GameManager.Startup();
 
             ScoreManager.Score = 0;

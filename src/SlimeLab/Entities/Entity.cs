@@ -1,57 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SlimeLab.Entities
 {
     public abstract class Entity
     {
-        private bool isReady = false;
+        protected Core Core { get; private set; }
 
-        protected Vector2 InstancePosition { get; private set; }
+        public Vector2 Position { get; set; }
+        public Vector2 Scale { get; set; }
 
-        public void InstantiateEntity(Core core, GraphicsDeviceManager graphics, ContentManager content, Vector2 position)
+        public Entity(Core core)
         {
-            this.InstancePosition = position;
+            this.Core = core;
 
-            OnInstantiate(core, graphics, content);
+            this.Position = Vector2.Zero;
+            this.Scale = Vector2.One;
         }
 
-        public void StartupEntity()
-        {
-            OnStartup();
-            this.isReady = true;
-        }
-
-        public void UpdateEntity(GameTime gameTime)
-        {
-            if (!this.isReady)
-            {
-                return;
-            }
-
-            OnUpdate(gameTime);
-        }
-
-        public void RenderEntity(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            if (!this.isReady)
-            {
-                return;
-            }
-
-            OnRender(gameTime, spriteBatch);
-        }
-
-        public void DestroyEntity()
-        {
-            OnDestroy();
-        }
-
-        protected virtual void OnInstantiate(Core core, GraphicsDeviceManager graphics, ContentManager content) { }
-        protected virtual void OnStartup() { }
-        protected virtual void OnUpdate(GameTime gameTime) { }
-        protected virtual void OnRender(GameTime gameTime, SpriteBatch spriteBatch) { }
-        protected virtual void OnDestroy() { }
+        public virtual void Startup() { return; }
+        public virtual void Update(GameTime gameTime) { return; }
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch) { return; }
+        public virtual void Destroy() { return; }
     }
 }
