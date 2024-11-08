@@ -13,6 +13,12 @@ namespace SlimeLab
     {
         public GraphicsDeviceManager GraphicsDeviceManager => this._graphics;
 
+        public EntityManager EntityManager => this.entityManager;
+        public GameManager GameManager => this.gameManager;
+        public ScoreManager ScoreManager => this.scoreManager;
+        public TickManager TickManager => this.tickManager;
+        public WorldManager WorldManager => this.worldManager;
+
         public Texture2D[] PlayerSheetTextures => this.playerSheetTextures;
         public Texture2D[] MetalThornSheetTextures => this.metalThornSheetTextures;
         public Texture2D[] CellSheetTextures => this.cellSheetTextures;
@@ -40,6 +46,12 @@ namespace SlimeLab
 
         private readonly Random random = new();
 
+        private readonly EntityManager entityManager;
+        private readonly GameManager gameManager;
+        private readonly ScoreManager scoreManager;
+        private readonly TickManager tickManager;
+        private readonly WorldManager worldManager;
+
         public Core()
         {
             this._graphics = new GraphicsDeviceManager(this);
@@ -50,6 +62,12 @@ namespace SlimeLab
             this.Window.AllowUserResizing = true;
             this.Window.Title = "Slime Lab";
             this.Window.IsBorderless = false;
+
+            this.entityManager = new(this);
+            this.gameManager = new(this);
+            this.scoreManager = new(this);
+            this.tickManager = new(this);
+            this.worldManager = new(this);
         }
 
         protected override void Initialize()
@@ -64,8 +82,8 @@ namespace SlimeLab
             Reset();
 
             SpriteFont defaultFont = this.Content.Load<SpriteFont>(@"SpriteFonts\DefaultFont");
-            ScoreManager.DefaultFont = defaultFont;
-            GameManager.DefaultFont = defaultFont;
+            this.ScoreManager.DefaultFont = defaultFont;
+            this.GameManager.DefaultFont = defaultFont;
 
             this.playerSheetTextures = new Texture2D[]
 {
@@ -131,14 +149,14 @@ namespace SlimeLab
                 Exit();
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.R) && GameManager.IsGameEnded)
+            if (Keyboard.GetState().IsKeyDown(Keys.R) && this.GameManager.IsGameEnded)
             {
                 Reset();
             }
 
-            EntityManager.UpdateEntities(gameTime);
-            TickManager.UpdateTick(gameTime);
-            GameManager.Update();
+            this.EntityManager.Update(gameTime);
+            this.TickManager.Update(gameTime);
+            this.GameManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -147,9 +165,9 @@ namespace SlimeLab
             this.GraphicsDevice.Clear(Color.White);
 
             this._spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, null);
-            EntityManager.DrawEntities(gameTime, this._spriteBatch);
-            ScoreManager.DrawScore(gameTime, this._spriteBatch, this._graphics);
-            GameManager.Render(gameTime, this._spriteBatch, this._graphics);
+            this.EntityManager.Draw(gameTime, this._spriteBatch);
+            this.ScoreManager.Draw(gameTime, this._spriteBatch);
+            this.GameManager.Draw(gameTime, this._spriteBatch);
             this._spriteBatch.End();
 
             base.Draw(gameTime);
@@ -157,14 +175,14 @@ namespace SlimeLab
 
         public void Reset()
         {
-            EntityManager.ClearEntitites();
-            WorldManager.Cancel();
+            this.EntityManager.ClearEntitites();
+            this.WorldManager.Cancel();
 
-            WorldManager.Startup(this);
-            GameManager.Startup();
+            this.WorldManager.Initialize();
+            this.GameManager.Initialize();
 
-            ScoreManager.Score = 0;
-            GameManager.IsGameEnded = false;
+            this.ScoreManager.Score = 0;
+            this.GameManager.IsGameEnded = false;
         }
     }
 }

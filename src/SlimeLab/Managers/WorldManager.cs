@@ -1,41 +1,46 @@
 ﻿using SlimeLab.Entities.Cells;
 using SlimeLab.Entities.MetalThorn;
 using SlimeLab.Entities.Player;
+using SlimeLab.Objects;
 
 namespace SlimeLab.Managers
 {
-    public static class WorldManager
+    public sealed class WorldManager : GameObject
     {
-        private static Core _core;
-
-        public static void Startup(Core core)
+        public WorldManager(Core core) : base(core)
         {
-            _core = core;
 
+        }
+
+        public override void Initialize()
+        {
             InstantiatePlayer();
 
-            TickManager.OnTicked += WorldTicked;
+            this.Core.TickManager.OnTicked += WorldTicked;
         }
-        public static void Cancel()
+
+        public void Cancel()
         {
-            TickManager.OnTicked -= WorldTicked;
+            this.Core.TickManager.OnTicked -= WorldTicked;
         }
-        private static void InstantiatePlayer()
+
+        private void InstantiatePlayer()
         {
-            _ = EntityManager.InstantiateEntity<PlayerEntity>(_core);
+            _ = this.Core.EntityManager.InstantiateEntity<PlayerEntity>();
         }
-        private static void WorldTicked()
+
+        private void WorldTicked()
         {
-            if (GameManager.IsGameEnded)
+            if (this.Core.GameManager.IsGameEnded)
             {
                 return;
             }
 
-            _ = EntityManager.InstantiateEntity<MoonCellEntity>(_core);
+            _ = this.Core.EntityManager.InstantiateEntity<MoonCellEntity>();
 
-            if (_core.Random.Next(0, 100) < 50)
+            if (this.Core.Random.Next(0, 100) < 50)
             {
-                _ = EntityManager.InstantiateEntity<MetalThornEntity>(_core);
+                _ = this.Core.EntityManager.InstantiateEntity<MetalThornEntity>();
             }
         }
     }

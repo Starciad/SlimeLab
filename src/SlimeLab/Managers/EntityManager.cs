@@ -2,68 +2,72 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using SlimeLab.Entities;
+using SlimeLab.Objects;
 
 using System;
 using System.Collections.Generic;
 
 namespace SlimeLab.Managers
 {
-    public static class EntityManager
+    public sealed class EntityManager : GameObject
     {
-        private static readonly List<Entity> instantiatedEntities = new();
+        private readonly List<Entity> instantiatedEntities = new();
 
-        //=================================//
-
-        public static void UpdateEntities(GameTime gameTime)
+        public EntityManager(Core core) : base(core)
         {
-            for (int i = 0; i < instantiatedEntities.Count; i++)
-            {
-                instantiatedEntities[i].Update(gameTime);
-            }
+
         }
-        public static void DrawEntities(GameTime gameTime, SpriteBatch spriteBatch)
+
+        public override void Update(GameTime gameTime)
         {
-            for (int i = 0; i < instantiatedEntities.Count; i++)
+            for (int i = 0; i < this.instantiatedEntities.Count; i++)
             {
-                instantiatedEntities[i].Draw(gameTime, spriteBatch);
+                this.instantiatedEntities[i].Update(gameTime);
             }
         }
 
-        //=================================//
-
-        public static T InstantiateEntity<T>(Core core) where T : Entity
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            return InstantiateEntity<T>(core, Vector2.Zero);
+            for (int i = 0; i < this.instantiatedEntities.Count; i++)
+            {
+                this.instantiatedEntities[i].Draw(gameTime, spriteBatch);
+            }
         }
-        public static T InstantiateEntity<T>(Core core, Vector2 position) where T : Entity
+
+        public T InstantiateEntity<T>() where T : Entity
         {
-            Entity entity = (Entity)Activator.CreateInstance(typeof(T), new object[] { core });
+            return InstantiateEntity<T>(Vector2.Zero);
+        }
+
+        public T InstantiateEntity<T>(Vector2 position) where T : Entity
+        {
+            Entity entity = (Entity)Activator.CreateInstance(typeof(T), new object[] { this.Core });
             entity.Position = position;
-            entity.Startup();
+            entity.Initialize();
 
-            instantiatedEntities.Add(entity);
+            this.instantiatedEntities.Add(entity);
             return (T)entity;
         }
 
-        public static T GetEntity<T>() where T : Entity
+        public T GetEntity<T>() where T : Entity
         {
-            return (T)(object)instantiatedEntities.Find(x => x.GetType() == typeof(T));
+            return (T)(object)this.instantiatedEntities.Find(x => x.GetType() == typeof(T));
         }
 
-        public static void DestroyEntity(Entity entity)
+        public void DestroyEntity(Entity entity)
         {
-            _ = instantiatedEntities.Remove(entity);
+            _ = this.instantiatedEntities.Remove(entity);
             entity.Destroy();
         }
 
-        public static void ClearEntitites()
+        public void ClearEntitites()
         {
-            for (int i = 0; i < instantiatedEntities.Count; i++)
+            for (int i = 0; i < this.instantiatedEntities.Count; i++)
             {
-                instantiatedEntities[i].Destroy();
+                this.instantiatedEntities[i].Destroy();
             }
 
-            instantiatedEntities.Clear();
+            this.instantiatedEntities.Clear();
         }
     }
 }

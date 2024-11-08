@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using SlimeLab.Entities.Particles;
 using SlimeLab.Entities.Player;
-using SlimeLab.Managers;
 
 namespace SlimeLab.Entities.Cells
 {
@@ -27,11 +26,11 @@ namespace SlimeLab.Entities.Cells
 
         }
 
-        public override void Startup()
+        public override void Initialize()
         {
             this.Position = new(this.Core.Random.Next(32, this.Core.GraphicsDeviceManager.PreferredBackBufferWidth - 32), this.Core.Random.Next(32, this.Core.GraphicsDeviceManager.PreferredBackBufferHeight - 32));
 
-            this.playerEntity = EntityManager.GetEntity<PlayerEntity>();
+            this.playerEntity = this.Core.EntityManager.GetEntity<PlayerEntity>();
         }
 
         public override void Update(GameTime gameTime)
@@ -39,14 +38,14 @@ namespace SlimeLab.Entities.Cells
             float distance = Vector2.Distance(this.Position, this.playerEntity.Position);
             if (distance < this.playerEntity.PlayerRadius && !this.collected)
             {
-                ScoreManager.Score++;
+                this.Core.ScoreManager.Score++;
                 this.collected = true;
 
                 this.playerEntity.NextPlayerScale += new Vector2(this.cellPower, this.cellPower);
-                _ = EntityManager.InstantiateEntity<MoonCellDestructionParticle>(this.Core, this.Position);
+                _ = this.Core.EntityManager.InstantiateEntity<MoonCellDestructionParticle>(this.Position);
 
                 this.Core.CollectSoundEffect.CreateInstance().Play();
-                EntityManager.DestroyEntity(this);
+                this.Core.EntityManager.DestroyEntity(this);
             }
         }
 

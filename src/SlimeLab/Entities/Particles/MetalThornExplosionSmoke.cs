@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using SlimeLab.Managers;
-
 namespace SlimeLab.Entities.Particles
 {
     public class MetalThornExplosionSmoke : Entity
@@ -22,7 +20,7 @@ namespace SlimeLab.Entities.Particles
             PositionUpdate();
             if (this.currentState == this.Core.ExplosionSmokeSheetTextures.Length - 1)
             {
-                EntityManager.DestroyEntity(this);
+                this.Core.EntityManager.DestroyEntity(this);
             }
         }
 

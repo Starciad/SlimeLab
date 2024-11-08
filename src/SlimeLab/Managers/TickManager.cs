@@ -1,26 +1,33 @@
 ﻿
 using Microsoft.Xna.Framework;
 
+using SlimeLab.Objects;
+
 namespace SlimeLab.Managers
 {
-    public static class TickManager
+    public sealed class TickManager : GameObject
     {
+        public event Ticked OnTicked;
+
         public delegate void Ticked();
-        public static event Ticked OnTicked;
 
-        private static readonly float TickTime = 1f;
-        private static float CurrentTickTime = 0f;
+        private readonly float tickTime = 1f;
+        private float currentTickTime = 0f;
 
-        public static void UpdateTick(GameTime gameTime)
+        public TickManager(Core core) : base(core)
         {
-            if (CurrentTickTime < TickTime)
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (this.currentTickTime < this.tickTime)
             {
-                CurrentTickTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.currentTickTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             else
             {
                 OnTicked?.Invoke();
-                CurrentTickTime = 0;
+                this.currentTickTime = 0;
             }
         }
     }

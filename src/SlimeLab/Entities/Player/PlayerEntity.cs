@@ -34,7 +34,7 @@ namespace SlimeLab.Entities.Player
 
         //=========================//
 
-        public override void Startup()
+        public override void Initialize()
         {
             this.Scale = Vector2.One;
             this.Position = new(this.Core.GraphicsDeviceManager.PreferredBackBufferWidth / 2, this.Core.GraphicsDeviceManager.PreferredBackBufferHeight / 2);

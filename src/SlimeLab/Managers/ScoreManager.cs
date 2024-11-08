@@ -1,22 +1,29 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using SlimeLab.Objects;
+
 using System.Text;
 
 namespace SlimeLab.Managers
 {
-    public static class ScoreManager
+    public sealed class ScoreManager : GameObject
     {
-        public static int Score { get; set; }
+        public int Score { get; set; }
 
-        public static SpriteFont DefaultFont { get; set; }
+        public SpriteFont DefaultFont { get; set; }
 
-        public static void DrawScore(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
+        public ScoreManager(Core core) : base(core)
         {
-            StringBuilder content = new(Score.ToString("00"));
-            Vector2 stringSize = DefaultFont.MeasureString(content.ToString());
 
-            spriteBatch.DrawString(DefaultFont, content.ToString(), new Vector2((graphics.PreferredBackBufferWidth / 2) - stringSize.X, 32), Color.Black, 0f, new Vector2(0, 0), 1f, SpriteEffects.None, 0);
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            StringBuilder content = new(this.Score.ToString("00"));
+            Vector2 stringSize = this.DefaultFont.MeasureString(content.ToString());
+
+            spriteBatch.DrawString(this.DefaultFont, content.ToString(), new Vector2((this.Core.GraphicsDeviceManager.PreferredBackBufferWidth / 2) - stringSize.X, 32), Color.Black, 0f, new Vector2(0, 0), 1f, SpriteEffects.None, 0);
         }
     }
 }

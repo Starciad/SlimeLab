@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using SlimeLab.Managers;
-
 namespace SlimeLab.Entities.Particles
 {
     public class MoonCellDestructionParticle : Entity
@@ -23,7 +21,7 @@ namespace SlimeLab.Entities.Particles
         {
             if (this.currentState == this.Core.MoonCellSheetTextures.Length - 1)
             {
-                EntityManager.DestroyEntity(this);
+                this.Core.EntityManager.DestroyEntity(this);
             }
         }
 

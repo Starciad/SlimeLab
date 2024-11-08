@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using SlimeLab.Entities.Particles;
 using SlimeLab.Entities.Player;
-using SlimeLab.Managers;
 
 namespace SlimeLab.Entities.MetalThorn
 {
@@ -32,7 +31,7 @@ namespace SlimeLab.Entities.MetalThorn
 
         }
 
-        public override void Startup()
+        public override void Initialize()
         {
             this.Position = new(this.Core.Random.Next(0, this.Core.GraphicsDeviceManager.PreferredBackBufferWidth), this.Core.Random.Next(0, this.Core.GraphicsDeviceManager.PreferredBackBufferHeight));
 
@@ -44,7 +43,7 @@ namespace SlimeLab.Entities.MetalThorn
             this.Position = tempPos;
             this.nextMetalThornPosition = this.Position;
 
-            this.playerEntity = EntityManager.GetEntity<PlayerEntity>();
+            this.playerEntity = this.Core.EntityManager.GetEntity<PlayerEntity>();
         }
 
         public override void Update(GameTime gameTime)
@@ -91,12 +90,12 @@ namespace SlimeLab.Entities.MetalThorn
 
                 for (int i = 0; i < 4; i++)
                 {
-                    MetalThornExplosion explosion = EntityManager.InstantiateEntity<MetalThornExplosion>(this.Core, this.Position);
+                    MetalThornExplosion explosion = this.Core.EntityManager.InstantiateEntity<MetalThornExplosion>(this.Position);
                     explosion.Direction = i + 1;
                 }
 
                 this.Core.ExplosionSoundEffect.CreateInstance().Play();
-                EntityManager.DestroyEntity(this);
+                this.Core.EntityManager.DestroyEntity(this);
             }
         }
 

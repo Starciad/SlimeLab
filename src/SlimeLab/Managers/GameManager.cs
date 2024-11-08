@@ -2,42 +2,48 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using SlimeLab.Entities.Player;
+using SlimeLab.Objects;
 
 using System.Text;
 
 namespace SlimeLab.Managers
 {
-    public static class GameManager
+    public sealed class GameManager : GameObject
     {
-        public static bool IsGameEnded { get; set; }
-        public static SpriteFont DefaultFont { get; set; }
+        public bool IsGameEnded { get; set; }
+        public SpriteFont DefaultFont { get; set; }
 
-        private static PlayerEntity player;
+        private PlayerEntity player;
 
-        public static void Startup()
+        public GameManager(Core core) : base(core)
         {
-            player = EntityManager.GetEntity<PlayerEntity>();
+
         }
 
-        public static void Update()
+        public override void Initialize()
         {
-            if (!IsGameEnded && player.IsDead)
+            this.player = this.Core.EntityManager.GetEntity<PlayerEntity>();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (!this.IsGameEnded && this.player.IsDead)
             {
-                IsGameEnded = true;
+                this.IsGameEnded = true;
             }
         }
 
-        public static void Render(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (!IsGameEnded)
+            if (!this.IsGameEnded)
             {
                 return;
             }
 
             StringBuilder content = new("Press R to reset!");
-            Vector2 stringSize = DefaultFont.MeasureString(content.ToString());
+            Vector2 stringSize = this.DefaultFont.MeasureString(content.ToString());
 
-            spriteBatch.DrawString(DefaultFont, content.ToString(), new Vector2((graphics.PreferredBackBufferWidth / 2) - stringSize.X, graphics.PreferredBackBufferHeight - 128), Color.Black, 0f, new Vector2(0, 0), 1f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(this.DefaultFont, content.ToString(), new Vector2((this.Core.GraphicsDeviceManager.PreferredBackBufferWidth / 2) - stringSize.X, this.Core.GraphicsDeviceManager.PreferredBackBufferHeight - 128), Color.Black, 0f, new Vector2(0, 0), 1f, SpriteEffects.None, 0);
         }
     }
 }

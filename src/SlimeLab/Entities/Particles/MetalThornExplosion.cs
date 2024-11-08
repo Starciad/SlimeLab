@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using SlimeLab.Managers;
-
 namespace SlimeLab.Entities.Particles
 {
     public class MetalThornExplosion : Entity
@@ -36,7 +34,7 @@ namespace SlimeLab.Entities.Particles
             if (this.Position.X > this.Core.GraphicsDeviceManager.PreferredBackBufferWidth + 128 || this.Position.X < -128 ||
                this.Position.Y > this.Core.GraphicsDeviceManager.PreferredBackBufferHeight + 128 || this.Position.Y < -128)
             {
-                EntityManager.DestroyEntity(this);
+                this.Core.EntityManager.DestroyEntity(this);
             }
         }
 
@@ -76,7 +74,7 @@ namespace SlimeLab.Entities.Particles
             }
             else
             {
-                _ = EntityManager.InstantiateEntity<MetalThornExplosionSmoke>(this.Core, this.Position);
+                _ = this.Core.EntityManager.InstantiateEntity<MetalThornExplosionSmoke>(this.Position);
 
                 this.currentSmokeSpawnTime = 0;
             }
