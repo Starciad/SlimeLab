@@ -15,13 +15,13 @@
 
 #begin Sounds/bullet-bill.ogg
 /importer:OggImporter
-/processor:SongProcessor
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/bullet-bill.ogg
 
 #begin Sounds/coin.ogg
 /importer:OggImporter
-/processor:SongProcessor
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/coin.ogg
 

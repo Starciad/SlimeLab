@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SlimeLab
+using SlimeLab.Entities;
+
+using System;
+using System.Collections.Generic;
+
+namespace SlimeLab.Managers
 {
     public static class EntityManager
     {
@@ -30,15 +32,15 @@ namespace SlimeLab
 
         //=================================//
 
-        public static T InstantiateEntity<T>(GraphicsDeviceManager graphics, ContentManager content) where T : Entity
+        public static T InstantiateEntity<T>(Core core, GraphicsDeviceManager graphics, ContentManager content) where T : Entity
         {
-            return InstantiateEntity<T>(graphics, content, Vector2.Zero);
+            return InstantiateEntity<T>(core, graphics, content, Vector2.Zero);
         }
-        public static T InstantiateEntity<T>(GraphicsDeviceManager graphics, ContentManager content, Vector2 position) where T : Entity
+        public static T InstantiateEntity<T>(Core core, GraphicsDeviceManager graphics, ContentManager content, Vector2 position) where T : Entity
         {
             Entity entity = Activator.CreateInstance<T>();
 
-            entity.InstantiateEntity(graphics, content, position);
+            entity.InstantiateEntity(core, graphics, content, position);
             entity.StartupEntity();
 
             instantiatedEntities.Add(entity);
@@ -52,7 +54,7 @@ namespace SlimeLab
 
         public static void DestroyEntity(Entity entity)
         {
-            instantiatedEntities.Remove(entity);
+            _ = instantiatedEntities.Remove(entity);
             entity.DestroyEntity();
         }
 

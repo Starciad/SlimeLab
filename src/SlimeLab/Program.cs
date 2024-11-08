@@ -4,7 +4,7 @@
     {
         private static void Main()
         {
-            using Startup game = new();
+            using Core game = new();
             game.Run();
         }
     }

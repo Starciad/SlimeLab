@@ -1,9 +1,9 @@
-﻿using System.Text;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SlimeLab
+using System.Text;
+
+namespace SlimeLab.Managers
 {
     public static class ScoreManager
     {

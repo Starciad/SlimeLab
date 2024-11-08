@@ -1,9 +1,11 @@
-﻿using System.Text;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SlimeLab
+using SlimeLab.Entities.Player;
+
+using System.Text;
+
+namespace SlimeLab.Managers
 {
     public static class GameManager
     {
@@ -28,7 +30,9 @@ namespace SlimeLab
         public static void Render(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
         {
             if (!IsGameEnded)
+            {
                 return;
+            }
 
             StringBuilder content = new("Press R to reset!");
             Vector2 stringSize = DefaultFont.MeasureString(content.ToString());

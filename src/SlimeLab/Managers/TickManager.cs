@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.Xna.Framework;
 
-namespace SlimeLab
+namespace SlimeLab.Managers
 {
     public static class TickManager
     {

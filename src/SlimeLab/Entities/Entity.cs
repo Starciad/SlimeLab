@@ -1,42 +1,44 @@
-﻿using System;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SlimeLab
+namespace SlimeLab.Entities
 {
-    public abstract class Entity : IDisposable
+    public abstract class Entity
     {
         private bool isReady = false;
 
         protected Vector2 InstancePosition { get; private set; }
 
-        public void InstantiateEntity(GraphicsDeviceManager graphics, ContentManager content, Vector2 position)
+        public void InstantiateEntity(Core core, GraphicsDeviceManager graphics, ContentManager content, Vector2 position)
         {
-            InstancePosition = position;
+            this.InstancePosition = position;
 
-            OnInstantiate(graphics, content);
+            OnInstantiate(core, graphics, content);
         }
 
         public void StartupEntity()
         {
             OnStartup();
-            isReady = true;
+            this.isReady = true;
         }
 
         public void UpdateEntity(GameTime gameTime)
         {
-            if (!isReady)
+            if (!this.isReady)
+            {
                 return;
+            }
 
             OnUpdate(gameTime);
         }
 
         public void RenderEntity(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (!isReady)
+            if (!this.isReady)
+            {
                 return;
+            }
 
             OnRender(gameTime, spriteBatch);
         }
@@ -44,19 +46,12 @@ namespace SlimeLab
         public void DestroyEntity()
         {
             OnDestroy();
-            Dispose();
         }
 
-        protected virtual void OnInstantiate(GraphicsDeviceManager graphics, ContentManager content) { }
+        protected virtual void OnInstantiate(Core core, GraphicsDeviceManager graphics, ContentManager content) { }
         protected virtual void OnStartup() { }
         protected virtual void OnUpdate(GameTime gameTime) { }
         protected virtual void OnRender(GameTime gameTime, SpriteBatch spriteBatch) { }
         protected virtual void OnDestroy() { }
-
-        public void Dispose()
-        {
-            GC.Collect(GC.GetGeneration(this), GCCollectionMode.Forced);
-            GC.SuppressFinalize(this);
-        }
     }
 }
