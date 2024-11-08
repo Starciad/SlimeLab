@@ -10,16 +10,10 @@ namespace SlimeLab.Managers
 {
     public static class EntityManager
     {
-        private static Core _core;
-
         private static readonly List<Entity> instantiatedEntities = new();
 
         //=================================//
 
-        public static void Startup(Core core)
-        {
-            _core = core;
-        }
         public static void UpdateEntities(GameTime gameTime)
         {
             for (int i = 0; i < instantiatedEntities.Count; i++)
@@ -43,7 +37,8 @@ namespace SlimeLab.Managers
         }
         public static T InstantiateEntity<T>(Core core, Vector2 position) where T : Entity
         {
-            Entity entity = (Entity)Activator.CreateInstance(typeof(T), new object[] { _core });
+            Entity entity = (Entity)Activator.CreateInstance(typeof(T), new object[] { core });
+            entity.Position = position;
             entity.Startup();
 
             instantiatedEntities.Add(entity);

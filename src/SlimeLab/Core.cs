@@ -160,7 +160,6 @@ namespace SlimeLab
             EntityManager.ClearEntitites();
             WorldManager.Cancel();
 
-            EntityManager.Startup(this);
             WorldManager.Startup(this);
             GameManager.Startup();
 
