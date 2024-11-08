@@ -38,9 +38,12 @@ namespace SlimeLab.Managers
 
             _ = this.Core.EntityManager.InstantiateEntity<MoonCellEntity>();
 
-            if (this.Core.Random.Next(0, 100) < 50)
+            for (int i = 0; i < this.Core.Random.Next(1, 4); i++)
             {
-                _ = this.Core.EntityManager.InstantiateEntity<MetalThornEntity>();
+                if (this.Core.Random.Next(0, 100) < 50)
+                {
+                    _ = this.Core.EntityManager.InstantiateEntity<MetalThornEntity>();
+                }
             }
         }
     }

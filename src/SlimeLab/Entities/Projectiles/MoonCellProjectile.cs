@@ -30,6 +30,7 @@ namespace SlimeLab.Entities.Projectiles
         {
             if (!this.hasTarget)
             {
+                this.Core.EntityManager.DestroyEntity(this);
                 return;
             }
 
@@ -60,6 +61,8 @@ namespace SlimeLab.Entities.Projectiles
                 MetalThornExplosion explosion = this.Core.EntityManager.InstantiateEntity<MetalThornExplosion>(this.Position);
                 explosion.Direction = i + 1;
             }
+
+            this.Core.ExplosionSoundEffect.CreateInstance().Play();
         }
 
         private void FindNearestTarget()

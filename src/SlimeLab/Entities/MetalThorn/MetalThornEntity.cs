@@ -8,6 +8,9 @@ namespace SlimeLab.Entities.MetalThorn
 {
     public class MetalThornEntity : Entity
     {
+        private readonly int distance = 5000;
+        private readonly int moveArea = 15;
+        
         // ENTITIES
         private PlayerEntity playerEntity;
 
@@ -33,17 +36,31 @@ namespace SlimeLab.Entities.MetalThorn
 
         public override void Initialize()
         {
-            this.Position = new(this.Core.Random.Next(0, this.Core.GraphicsDeviceManager.PreferredBackBufferWidth), this.Core.Random.Next(0, this.Core.GraphicsDeviceManager.PreferredBackBufferHeight));
+            this.playerEntity = this.Core.EntityManager.GetEntity<PlayerEntity>();
 
             Vector2 tempPos = Vector2.Zero;
 
-            tempPos.X = tempPos.X < this.Core.GraphicsDeviceManager.PreferredBackBufferWidth / 2 ? -100 : tempPos.X = this.Core.GraphicsDeviceManager.PreferredBackBufferWidth + 100;
-            tempPos.Y = tempPos.Y < this.Core.GraphicsDeviceManager.PreferredBackBufferHeight / 2 ? tempPos.X = this.Core.GraphicsDeviceManager.PreferredBackBufferWidth + 100 : -100;
+            if (this.Core.Random.Next(0, 100) < 50)
+            {
+                tempPos.X = this.playerEntity.Position.X + this.distance;
+            }
+            else
+            {
+                tempPos.X = this.playerEntity.Position.X - this.distance;
+            }
+
+            if (this.Core.Random.Next(0, 100) < 50)
+            {
+                tempPos.Y = this.playerEntity.Position.Y + this.distance;
+            }
+            else
+            {
+                tempPos.Y = this.playerEntity.Position.Y - this.distance;
+            }
 
             this.Position = tempPos;
-            this.nextMetalThornPosition = this.Position;
 
-            this.playerEntity = this.Core.EntityManager.GetEntity<PlayerEntity>();
+            this.nextMetalThornPosition = this.Position;
         }
 
         public override void Update(GameTime gameTime)
@@ -63,20 +80,20 @@ namespace SlimeLab.Entities.MetalThorn
         {
             if (this.playerEntity.Position.X + this.Core.Random.Next(-1000, 1000) < this.Position.X)
             {
-                this.nextMetalThornPosition.X -= this.Core.Random.Next(1, 20) + (this.metalThornSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                this.nextMetalThornPosition.X -= this.Core.Random.Next(1, this.moveArea) + (this.metalThornSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
             else
             {
-                this.nextMetalThornPosition.X += this.Core.Random.Next(1, 20) + (this.metalThornSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                this.nextMetalThornPosition.X += this.Core.Random.Next(1, this.moveArea) + (this.metalThornSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
             if (this.playerEntity.Position.Y + this.Core.Random.Next(-1000, 1000) < this.Position.Y)
             {
-                this.nextMetalThornPosition.Y -= this.Core.Random.Next(1, 20) + (this.metalThornSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                this.nextMetalThornPosition.Y -= this.Core.Random.Next(1, this.moveArea) + (this.metalThornSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
             else
             {
-                this.nextMetalThornPosition.Y += this.Core.Random.Next(1, 20) + (this.metalThornSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                this.nextMetalThornPosition.Y += this.Core.Random.Next(1, this.moveArea) + (this.metalThornSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
         }
 
@@ -101,7 +118,7 @@ namespace SlimeLab.Entities.MetalThorn
 
         private void MetalThornPositionUpdate(GameTime gameTime)
         {
-            this.Position = Vector2.Lerp(this.Position, this.nextMetalThornPosition, 6f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            this.Position = Vector2.Lerp(this.Position, this.nextMetalThornPosition, 1f * (float)gameTime.ElapsedGameTime.TotalSeconds);
         }
 
         private void AnimationUpdate(GameTime gameTime)
